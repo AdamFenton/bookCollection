@@ -54,3 +54,9 @@ def batch_lookup(collection):
         collection = pd.concat([collection, pd.DataFrame([new_entry])])
 
     collection.to_csv('%s/book_collection.csv' % os.getcwd(),index=False)
+
+
+def single_lookup(isbn,collection):
+    new_entry = barcode_lookup(isbn)
+    collection = pd.concat([collection, pd.DataFrame([new_entry])])
+    collection.to_csv('%s/book_collection.csv' % os.getcwd(),index=False)
