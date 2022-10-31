@@ -6,6 +6,11 @@ from pathlib import Path # Required to create thumbnail directory
 
 
 def barcode_lookup(isbn):
+
+    ''' Use google's API to lookup the ISBN of a book and return its
+        title, author(s), publication date, page count and genre(s).
+    '''
+
     Path("%s/thumbnails/" % os.getcwd()).mkdir(parents=True, exist_ok=True )
     api = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
     resp = urlopen(api + str(isbn))
@@ -30,4 +35,22 @@ def barcode_lookup(isbn):
         print('No image found for <%s>' % volume_info['title'] )
 
     new_entry = {'title':title, 'author':prettify_author, 'published':published,'pages':pages,'genre':genre}
+
     return new_entry
+
+
+
+def batch_lookup(collection):
+
+    ''' Load a dataframe of ISBN numbers produced by barcode scanner and pass
+        each ISBN to the barcode_lookup function. A new dataframe is produced
+        at the end of this function containing the information for all the
+        books scanned.
+    '''
+    df_scans = pd.read_csv('isbn_scans.csv',header = 0)
+    ISBNS = df_scans['Code data']
+    for isbn in ISBNS:
+        new_entry = barcode_lookup(isbn)
+        collection = pd.concat([collection, pd.DataFrame([new_entry])])
+
+    collection.to_csv('%s/book_collection.csv' % os.getcwd(),index=False)
