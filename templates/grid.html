@@ -1,0 +1,41 @@
+<!doctype html>
+<head>
+<title>Example</title>
+
+<style>
+body{
+        background-image: url("{{ url_for('static', filename='jupiterAtmos.jpg') }}");
+        background-attachment: fixed;
+        background-position: center; 
+    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+  align-items: stretch;
+  }
+.grid img {
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
+  max-width: 100%;
+}
+</style>
+</head>
+<main class="grid">
+
+  <img src={{ url_for('static', filename="thumbnails/9780007341900.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780099289524.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780099540540.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780099740919.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780140032192.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780140620757.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780141186672.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780141389431.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780330437561.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780553826166.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9781780897431.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9781781258637.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9781782275404.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9781788162302.jpeg") }}/>
+  <img src={{ url_for('static', filename="thumbnails/9780007341900.jpeg") }}/>
+</main>
