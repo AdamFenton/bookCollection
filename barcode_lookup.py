@@ -4,6 +4,8 @@ import pandas as pd
 from urllib.request import urlopen,urlretrieve
 from pathlib import Path # Required to create thumbnail directory
 from pretty_html_table import build_table
+import fileinput
+
 
 def barcode_lookup(isbn):
 
@@ -11,38 +13,55 @@ def barcode_lookup(isbn):
         title, author(s), publication date, page count and genre(s).
     '''
 
-    Path("%s/thumbnails/" % os.getcwd()).mkdir(parents=True, exist_ok=True )
+    Path("%s/static/thumbnails/" % os.getcwd()).mkdir(parents=True, exist_ok=True )
     api = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
     resp = urlopen(api + str(isbn))
     book_data = json.load(resp)
 
-    volume_info = book_data["items"][0]["volumeInfo"]
-    author = volume_info["authors"]
-    prettify_author = author if len(author) > 1 else author[0]
-    title = volume_info['title']
-    published = volume_info['publishedDate']
-    pages = volume_info['pageCount']
-
     try:
-        genre = volume_info['categories']
-    except:
-        genre = None
-        print('No genre found for <%s>' % volume_info['title'])
-    try:
-        image = book_data['items'][0]["volumeInfo"]['imageLinks']['thumbnail']
-        urlretrieve(image, "thumbnails/%s.jpeg" % isbn)
-    except:
-        print('No image found for <%s>' % volume_info['title'] )
+        volume_info = book_data["items"][0]["volumeInfo"]
+        author = volume_info["authors"]
+        prettify_author = author if len(author) > 1 else author[0]
+        title = volume_info['title']
+        published = volume_info['publishedDate']
+        pages = volume_info['pageCount']
+        surname = prettify_author.split(' ')[1]
+        try:
+            genre = volume_info['categories']
+        except:
+            genre = None
+            print('No genre found for <%s>' % volume_info['title'])
+        try:
+            image = book_data['items'][0]["volumeInfo"]['imageLinks']['thumbnail']
+            urlretrieve(image, "static/thumbnails/%s_%s.jpeg" % (surname,isbn))
+        except:
+                print('No image found for <%s>' % volume_info['title'] )
 
-    new_entry = {'title':title, 'author':prettify_author, 'published':published,'pages':pages,'genre':genre}
+        new_entry = {'title':title, 'author':prettify_author, 'published':published,'pages':pages,'genre':genre}
+        print('Completed Entry for <%s>' % volume_info['title'] )
+        return new_entry
 
-    return new_entry
+    except:
+        print('No Entry found for this title')
+
+def retrieve_thumbnail(isbn):
+        api = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
+        resp = urlopen(api + str(isbn))
+        book_data = json.load(resp)
+        try:
+            image = book_data['items'][0]["volumeInfo"]['imageLinks']['thumbnail']
+            urlretrieve(image, "static/thumbnails/%s.jpeg" % isbn)
+        except:
+                print('No image found for <%s>' % volume_info['title'] )
+
 
 
 def format_collection(collection):
+    ''' Format the pandas dataframe to a html table and save it to a file
+        static/ directory
+    '''
 
     html_table_blue_light = build_table(collection, 'blue_light')
-    # Save to html file
     with open('%s/templates/table.html' % os.getcwd(), 'w') as f:
         f.write(html_table_blue_light)
 
@@ -54,14 +73,13 @@ def batch_lookup(collection):
         at the end of this function containing the information for all the
         books scanned.
     '''
-    df_scans = pd.read_csv('isbn_scans.csv',header = 0)
+    df_scans = pd.read_csv('isbn_scans_pt2.csv',header = 0)
     ISBNS = df_scans['Code data']
     for isbn in ISBNS:
         new_entry = barcode_lookup(isbn)
         collection = pd.concat([collection, pd.DataFrame([new_entry])])
 
     collection.to_csv('%s/book_collection.csv' % os.getcwd(),index=False)
-
 
 
 def single_lookup(isbn,collection):
