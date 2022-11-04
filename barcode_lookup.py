@@ -5,7 +5,7 @@ from urllib.request import urlopen,urlretrieve
 from pathlib import Path # Required to create thumbnail directory
 from pretty_html_table import build_table
 import fileinput
-
+import shutil
 
 def barcode_lookup(isbn):
 
@@ -25,7 +25,7 @@ def barcode_lookup(isbn):
         title = volume_info['title']
         published = volume_info['publishedDate']
         pages = volume_info['pageCount']
-        surname = prettify_author.split(' ')[1]
+        surname = prettify_author.split(' ')[1].replace("'","")
         try:
             genre = volume_info['categories']
         except:
@@ -35,7 +35,8 @@ def barcode_lookup(isbn):
             image = book_data['items'][0]["volumeInfo"]['imageLinks']['thumbnail']
             urlretrieve(image, "static/thumbnails/%s_%s.jpeg" % (surname,isbn))
         except:
-                print('No image found for <%s>' % volume_info['title'] )
+            print('No image found for <%s>' % volume_info['title'] )
+            shutil.copyfile('%s/unknownCover.jpg' % os.getcwd(), "static/thumbnails/%s_%s.jpeg" % (surname,isbn))
 
         new_entry = {'title':title, 'author':prettify_author, 'published':published,'pages':pages,'genre':genre}
         print('Completed Entry for <%s>' % volume_info['title'] )
@@ -43,16 +44,6 @@ def barcode_lookup(isbn):
 
     except:
         print('No Entry found for this title')
-
-def retrieve_thumbnail(isbn):
-        api = "https://www.googleapis.com/books/v1/volumes?q=isbn:"
-        resp = urlopen(api + str(isbn))
-        book_data = json.load(resp)
-        try:
-            image = book_data['items'][0]["volumeInfo"]['imageLinks']['thumbnail']
-            urlretrieve(image, "static/thumbnails/%s.jpeg" % isbn)
-        except:
-                print('No image found for <%s>' % volume_info['title'] )
 
 
 

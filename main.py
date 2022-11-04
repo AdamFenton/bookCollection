@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from pathlib import Path # Required to create thumbnail directory
 import glob
+
 collection_exists = os.path.isfile('%s/book_collection.csv' % os.getcwd())
 #
 # if collection_exists == True:
