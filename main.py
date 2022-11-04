@@ -22,8 +22,16 @@ collection_exists = os.path.isfile('%s/book_collection.csv' % os.getcwd())
 
 thumbnails = glob.glob("%s/static/thumbnails/*" % os.getcwd())
 thumbnails = sorted(thumbnails, key = lambda x: x.split('_')[0].split('.')[0])
+def generate_image_link(thumbnail):
+    surname = thumbnail.split('_')[0].split('/')[-1]
+    isbn = thumbnail.split('_')[1]
+    file = os.path.basename(thumbnail)
+
+    string = "<a href = '/book/%s'> \
+              <img src={{ url_for('static', filename='thumbnails/%s') }}/> \
+              </a>" % (isbn,file)
+
+    return string
 
 for thumbnail in thumbnails:
-    file = os.path.basename(thumbnail)
-    string = "<img src={{ url_for('static', filename='thumbnails/%s') }}/>" % file
-    print(string)
+    print(generate_image_link(thumbnail))

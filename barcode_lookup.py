@@ -64,7 +64,7 @@ def batch_lookup(collection):
         at the end of this function containing the information for all the
         books scanned.
     '''
-    df_scans = pd.read_csv('isbn_scans_pt2.csv',header = 0)
+    df_scans = pd.read_csv('isbn_scans.csv',header = 0)
     ISBNS = df_scans['Code data']
     for isbn in ISBNS:
         new_entry = barcode_lookup(isbn)
