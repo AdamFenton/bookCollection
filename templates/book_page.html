@@ -21,11 +21,29 @@ body{
 }
 
 img {
-  width: 400px,
-  height: auto
+   padding: 20px;
 }
+
+.square{
+  width: 800px;
+  height: 500px;
+  background-color: transparent;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -400px;
+  margin-top: -250px;
+  outline: white solid 10px;
+
+
+}
+
 
 </style>
 </head>
+<!-- <h1>{{ value }}<h1> -->
 
-<img src={{ url_for('static', filename=value) }}/>
+<div class='square'>
+  <img src={{ url_for('static', filename= value ) }}/>
+
+</div>
