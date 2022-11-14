@@ -18,6 +18,7 @@ def barcode_lookup(isbn):
     resp = urlopen(api + str(isbn))
     book_data = json.load(resp)
 
+
     try:
         volume_info = book_data["items"][0]["volumeInfo"]
         author = volume_info["authors"]
@@ -38,6 +39,7 @@ def barcode_lookup(isbn):
             print('No image found for <%s>' % volume_info['title'] )
             shutil.copyfile('%s/unknownCover.jpg' % os.getcwd(), "static/thumbnails/%s_%s.jpeg" % (surname,isbn))
 
+        
         new_entry = {'title':title, 'author':prettify_author, 'published':published,'pages':pages,'genre':genre}
         print('Completed Entry for <%s>' % volume_info['title'] )
         return new_entry
@@ -64,9 +66,15 @@ def batch_lookup(collection):
         at the end of this function containing the information for all the
         books scanned.
     '''
-    df_scans = pd.read_csv('isbn_scans.csv',header = 0)
-    ISBNS = df_scans['Code data']
+    df = pd.read_csv('isbn_scans_pt3.csv',names=['a','b','c','d','e'])
+    # df = df.dropna()
+    ISBNS = df['a'].dropna()
+
+    # df_scans = pd.read_csv('isbn_scans.csv',header = 0)
+    # ISBNS = df_scans['Code data']
     for isbn in ISBNS:
+        isbn = int(isbn)
+
         new_entry = barcode_lookup(isbn)
         collection = pd.concat([collection, pd.DataFrame([new_entry])])
 

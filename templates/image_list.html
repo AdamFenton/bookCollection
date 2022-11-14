@@ -1,40 +1,5 @@
-<!doctype html>
-<head>
-<title>Example</title>
 
-<style>
-body{
-        background-image: url("{{ url_for('static', filename='jupiterAtmos.jpg') }}");
-        background-attachment: fixed;
-        background-position: center;
-    }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  grid-gap: 20px;
-  align-items: stretch;
-   --f: 1.5; /* controls the scale factor */
-  }
-.grid img {
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 6px 0px  rgba(0,0,0,0.3);
-  max-width: 100%;
-}
-.grid img:hover{
-  width:  calc(var(--s) * var(--f));
-  height: calc(var(--s) * var(--f));
-}
-#unread {
-    filter: grayscale(100%);
-}
-#reading{
-  border: 5px solid #4CBB17;
-}
-}
-</style>
-</head>
-{% include 'image_list.html' %}
-<!-- <main class="grid">
+<main class="grid">
 <a href = '/book/9780330491235'>               <img id='unread' src={{ url_for('static', filename='thumbnails/Adams_9780330491235.jpeg') }}/>               </a>
 <a href = '/book/9780330491204'>               <img id='unread' src={{ url_for('static', filename='thumbnails/Adams_9780330491204.jpeg') }}/>               </a>
 <a href = '/book/9780330491228'>               <img id='unread' src={{ url_for('static', filename='thumbnails/Adams_9780330491228.jpeg') }}/>               </a>
@@ -225,4 +190,4 @@ body{
 <a href = '/book/9781853260155'>               <img src={{ url_for('static', filename='thumbnails/Wilde_9781853260155.jpeg') }}/>               </a>
 <a href = '/book/9781784162122'>               <img id='unread' src={{ url_for('static', filename='thumbnails/Zusak_9781784162122.jpeg') }}/>               </a>
 <a href = '/book/9780141194523'>               <img src={{ url_for('static', filename='thumbnails/le_9780141194523.jpeg') }}/>               </a>
-</main> -->
+</main>
